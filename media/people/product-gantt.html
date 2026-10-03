@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+  SOURCE for media/people/product-gantt.png (Roadmap slide).
+  Edit here, then re-render with:  node scripts/render-gantt.js
+
+  Rendered as a TRANSPARENT png so it sits on the slide rather than on a
+  panel of its own. Text is dark: the slide behind it is white.
+
+  Timeline runs Aug '26 -> Aug '27 (end of band) across four equal bands.
+  Helper percentages (Aug26=0 .. Sep27=100):
+    Aug26 0.0  Sep26 7.83  Oct26 15.4 | Nov26 23.23 Dec26 30.81 Jan27 38.64 Feb27 46.46
+    Mar27 53.54 Apr27 61.36 May27 68.94 Jun27 76.77 | Jul27 84.34 Aug27 92.17 end(Sep27) 100
+  Today line: late Sep 2026 = 13.64%.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --indigo:#4b3fae; --indigo-d:#2b1f5e;
+    --teal:#9fe0da; --amber:#ffd75e; --lav:#c3bdf2; --coral:#ffbe7d;
+    --ink:#14141a; --grey:#7c7c8a; --rule:#e6e6ee;
+    --disp:'Archivo',Arial,sans-serif; --sans:'Inter',Arial,sans-serif;
+    --lab:214px; --rowh:52px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1800px;background:transparent;font-family:var(--sans);color:var(--ink);padding:26px 90px 10px 10px}
+  .grid{position:relative}
+
+  /* ---- period header ---- */
+  .bands{display:grid;grid-template-columns:var(--lab) repeat(4,1fr);gap:8px;align-items:end;
+         padding-bottom:11px;border-bottom:1.5px solid var(--rule);margin-bottom:6px}
+  .axislab{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.15em;
+           text-transform:uppercase;color:var(--grey)}
+  .band{text-align:center;font-family:var(--disp);font-weight:800;font-size:19px;color:var(--indigo-d);
+        background:#f2f1f8;border-radius:7px;padding:8px 0}
+
+  /* ---- rows ---- */
+  .row{display:grid;grid-template-columns:var(--lab) 1fr;align-items:center;min-height:var(--rowh);
+       position:relative}
+  .row.band-alt::before{content:'';position:absolute;inset:0;background:rgba(20,20,26,.028);border-radius:8px}
+  .rlab{font-family:var(--disp);font-weight:800;font-size:19px;line-height:1.12;position:relative;padding-left:4px}
+  .rlab small{display:block;font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--grey);margin-top:2px}
+  .track{position:relative;height:var(--rowh)}
+  .bar{position:absolute;top:50%;transform:translateY(-50%);height:31px;border-radius:8px;
+       display:flex;align-items:center;padding:0 13px;
+       font-family:var(--disp);font-weight:700;font-size:14.5px;white-space:nowrap;color:var(--ink)}
+  .bar.lbl-out{background:transparent!important;padding:0}
+  .bar.lbl-out span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    border-radius:8px;padding:0 13px;height:31px;display:flex;align-items:center;
+    white-space:nowrap;z-index:1}
+  .bar.prv.lbl-out span{background:var(--lav)}
+  .bar.hrv.lbl-out span{background:var(--coral)}
+  .bar.bld.lbl-out span{background:var(--amber)}
+  .bar.lbl-above span{top:auto;bottom:calc(100% + 4px);transform:translate(-50%,0)}
+  .bar.lbl-out span[style*="right:0"]{transform:translate(0,-50%)}
+  .bar.lbl-above span[style*="right:0"]{transform:translate(0,0)}
+  .bar.bld{background:var(--amber)}
+  .bar.prv{background:var(--lav)}  .bar.hrv{background:var(--coral)}
+
+  /* ---- vertical period rules ---- */
+  .chartbody{position:relative}
+  .rules{position:absolute;left:var(--lab);right:0;top:0;bottom:0;pointer-events:none}
+  .todayhead{position:absolute;left:var(--lab);right:0;top:-20px;height:18px;pointer-events:none}
+  .rule{position:absolute;top:0;bottom:0;width:1px;background:var(--rule)}
+
+  /* ---- today line ---- */
+  .today{position:absolute;top:0;bottom:0;width:2px;background:var(--indigo);z-index:2}
+  .todaylab{position:absolute;top:0;left:8px;font-family:var(--disp);font-weight:800;font-size:12.5px;
+            letter-spacing:.08em;text-transform:uppercase;color:var(--indigo-d);white-space:nowrap;
+            background:rgba(255,255,255,.9);padding:0 4px;border-radius:3px}
+
+  /* ---- gates ---- */
+  .gate{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px;
+        color:var(--ink);font-family:var(--sans);font-weight:600;font-size:14px;white-space:nowrap}
+  .dia{width:12px;height:12px;background:var(--amber);transform:rotate(45deg);flex:none;border-radius:2px}
+
+  /* ---- dark variant ----
+     Rendered to product-gantt-dark.png for the dark Roadmap slide.
+     Only the text that sits directly on the slide is lightened; labels that sit
+     on their own light chips (bars, band headers, GATES) keep the dark ink. */
+  body.dark .rlab{color:#eef2fb}
+  body.dark .rlab small{color:#aab3c8}
+  body.dark .gate{color:#e9ecf5}
+  body.dark .todaylab{color:#c3bdf2;background:rgba(20,20,26,.85)}
+  body.dark .today{background:#c3bdf2}
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <div class="todayhead">
+    <div class="todaylab" style="left:calc(13.64% + 6px)">Today</div>
+  </div>
+  <div class="bands">
+    <div class="axislab">Build calendar</div>
+    <div class="band">AUG &ndash; OCT '26</div>
+    <div class="band">NOV '26 &ndash; FEB '27</div>
+    <div class="band">MAR &ndash; JUN '27</div>
+    <div class="band">JUL &ndash; AUG '27</div>
+  </div>
+
+  <div class="chartbody">
+  <div class="rules">
+    <div class="rule" style="left:25%"></div>
+    <div class="rule" style="left:50%"></div>
+    <div class="rule" style="left:75%"></div>
+    <div class="today" style="left:13.64%"></div>
+  </div>
+
+  <div class="row band-alt">
+    <div class="rlab">Build<small>platform tooling</small></div>
+    <div class="track">
+      <div class="bar bld" style="left:0%;width:22.98%">Validate + insights engine</div>
+      <div class="bar bld" style="left:23.23%;width:30.05%">Market v1</div>
+    </div>
+  </div>
+  <div class="row band-alt" style="min-height:44px">
+    <div class="rlab"></div>
+    <div class="track" style="height:44px">
+      <div class="bar bld" style="left:7.83%;width:29.5%">Plan</div>
+      <div class="bar bld" style="left:39.94%;width:36.83%">Coach</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="rlab">Prove<small>the events that test it live</small></div>
+    <div class="track">
+      <div class="bar prv" style="left:7.83%;width:45.71%">Coherence: live demand test</div>
+    </div>
+  </div>
+  <div class="row" style="min-height:44px">
+    <div class="rlab"></div>
+    <div class="track" style="height:44px">
+      <div class="bar prv lbl-out" style="left:69.94%;width:15.4%"><span>Midnight Sun: memory test</span></div>
+      <div class="bar prv lbl-out" style="left:88.34%;width:11.66%"><span style="left:auto;right:0;transform:translate(0,-50%)">Egypt: full lifecycle at scale</span></div>
+    </div>
+  </div>
+
+  <div class="row band-alt" style="min-height:52px;margin-top:14px">
+    <div class="rlab">Learn<small>templates for the next event</small></div>
+    <div class="track" style="height:52px">
+      <div class="bar hrv" style="left:7.83%;width:17.57%">Iceland &rarr; template</div>
+      <div class="bar hrv lbl-out lbl-above" style="left:59.01%;width:9.93%"><span>Coherence + Atomika harvest</span></div>
+      <div class="bar hrv lbl-out lbl-above" style="left:88.34%;width:11.66%"><span style="left:auto;right:0;transform:translate(0,0)">M.Sun + Egypt harvest</span></div>
+    </div>
+  </div>
+  </div><!-- /chartbody -->
+
+  <div class="row" style="min-height:40px;border-top:1.5px solid var(--rule);margin-top:6px">
+    <div class="rlab" style="font-size:15px;letter-spacing:.15em;text-transform:uppercase;color:var(--grey)">Gates</div>
+    <div class="track" style="height:40px">
+      <div class="gate" style="left:18.94%;transform:translate(-50%,-50%)"><span class="dia"></span>OCT 15 &middot; Iceland corpus freeze</div>
+      <div class="gate" style="left:53.54%;transform:translate(-50%,-50%)"><span class="dia"></span>MAR &middot; Orion beta at Coherence</div>
+    </div>
+  </div>
+  <div class="row" style="min-height:38px">
+    <div class="rlab"></div>
+    <div class="track" style="height:38px">
+      <div class="gate" style="left:34.34%;transform:translate(-50%,-50%)"><span class="dia"></span>DEC 15 &middot; Plan go/no-go</div>
+      <div class="gate" style="left:68.94%;transform:translate(-50%,-50%)"><span class="dia"></span>MAY &middot; Orion release at Atomika</div>
+    </div>
+  </div>
+  <div class="row" style="min-height:38px">
+    <div class="rlab"></div>
+    <div class="track" style="height:38px">
+      <div class="gate" style="right:0%;transform:translate(0,-50%);left:auto"><span class="dia"></span>AFTER EGYPT, AUG '27 &middot; Decision point: scale IMXP or offer Orion</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
