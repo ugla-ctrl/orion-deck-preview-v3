@@ -45,9 +45,11 @@ https://ugla-ctrl.github.io/imxp-fundraise-deck/
 
 ## Navigation
 
-- **← / →**, **Space / Page Down**, **Home / End**
-- Swipe on touch, scroll / trackpad, or the dot rail
-- Deep-link to any slide with `#<n>`
+A slide changes only on a deliberate action. Tapping or clicking the page does nothing.
+
+- **Phone:** swipe left for the next slide and right for the previous one. Scroll down on any slide to read all of it.
+- **Desktop:** the arrow buttons by the dots, **← / →**, **Space / Page Down / Page Up**, a two-finger trackpad swipe, or a mouse drag. **Home / End** jump to the first or last slide.
+- The dot rail jumps to any slide; deep-link with `?slide=<n>`.
 
 ## Slide order
 
